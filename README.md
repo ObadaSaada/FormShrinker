@@ -1,7 +1,7 @@
 # FormShrinker
 small Library that can be used to shrink the size of large forms by changing group of elements to inline text
 
-#Usage
+# Usage
 
 * include the file into your project
 * add initialization Query Selector to your code <code> $('.formShrink').formShrink(); </code>
