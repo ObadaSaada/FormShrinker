@@ -1,13 +1,14 @@
-﻿/**
+/**
  * Name:			Form Shrinker
  * File:			fromShrinker.js
- * Version:			1.0.0 (Last Modified: 06/25/2019)
+ * Version:			1.0.0 (Last Modified: 07/02/2019)
  * Author:			Obada Saada ()
  * Description:		in place edit group of form elements 
  * ------------------------------------------------------------------------------------
  * Date			    Author		        Changes
  * ------------------------------------------------------------------------------------
  * jun 25 2019	    Obada Saada			Created.
+ * jul 02 2019      Obada Saada         Allow fs-label For Radio,checkbox
  * ===================================================================================
  * USAGE:
  * ------------------------------------------------------------------------------------
@@ -62,14 +63,14 @@
         
     };
 })(jQuery);
-var data = [];
 function ShrinkerInputsData(inputs,selector,editMode,editSelector)
 {
     editMode = typeof editMode !== 'undefined' ? editMode : false;
 
     var isEmpty = true;
+    var isRadio = false;
+    var isCheckbox = false;
     var data = [];
-    var checkboxes = [];
     //-----------------------------------------------------------------------
     //https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/elements
     //-----------------------------------------------------------------------
@@ -93,14 +94,35 @@ function ShrinkerInputsData(inputs,selector,editMode,editSelector)
             }
         }
         else if (inputs.inputs[i].nodeName === "INPUT" && inputs.inputs[i].type === "radio" && inputs.inputs[i].checked === true) {
-
-            data.push({ lbl: inputs.inputs[i].labels[0], val: inputs.inputs[i].value });
+            var radioLabel = '';
+            isRadio = true;
+            for (var lblNum = 0; lblNum < inputs.labels.length; lblNum++) {
+                if(inputs.labels[lblNum].hasAttribute('fs-label'))
+                {
+                    radioLabel = inputs.labels[lblNum].innerHTML
+                }
+            }
+            data.push({ lbl: radioLabel, val: inputs.inputs[i].value });
             if (inputs.inputs[i].value != "") {
                 isEmpty = false;
             }
         }
         else if (inputs.inputs[i].nodeName === "INPUT" && inputs.inputs[i].type === "checkbox" && inputs.inputs[i].checked === true) {
-            data.push({ lbl: inputs.inputs[i].labels[0], val: inputs.inputs[i].value });
+            var checkboxLabel = '';
+            
+            isCheckbox = true;
+            for (var lblNum = 0; lblNum < inputs.labels.length; lblNum++) {
+                if (inputs.labels[lblNum].hasAttribute('fs-label')) {
+                    checkboxLabel = inputs.labels[lblNum].innerHTML
+                }
+            }
+            if(data.length>0)
+                data[0].val.push(inputs.inputs[i].value);
+            else
+            {
+                data.push({ lbl: checkboxLabel, val:[ inputs.inputs[i].value ] });
+            }
+
             if (inputs.inputs[i].value != "") {
                 isEmpty = false;
             }
@@ -113,7 +135,6 @@ function ShrinkerInputsData(inputs,selector,editMode,editSelector)
             }
         }
         else if (inputs.inputs[i].nodeName === "TEXTAREA") {
-            
             data.push({ lbl: inputs.inputs[i].labels[0], val: inputs.inputs[i].value });
 
             //data.push(inputs.inputs[i].value.replace(/\n/g, "<br />"));
@@ -121,9 +142,6 @@ function ShrinkerInputsData(inputs,selector,editMode,editSelector)
                 isEmpty = false;
             }
         }
-    }
-    if (checkboxes.length > 0) {
-        data.push("[" + checkboxes + "]")
     }
     
     data = data.filter(v => data.values(v).length !== 0);
@@ -145,35 +163,51 @@ function ShrinkerInputsData(inputs,selector,editMode,editSelector)
         if (isEmpty)
             $('div#' + selector.id + '-edit').html("<label id='" + selector.id + "'></label><a class='mx-2' href='javascript:;' shrinked-item='true' shrink-group-id='" + selector.id + "'>Empty</a>");
         else
-            for (var n = 0; n < data.length; n++) {
-                if (data[n].lbl != undefined)
-                {
-                    $('div#' + selector.id + '-edit').append("<label id='" + selector.id + "'>" + data[n].lbl.innerHTML + "</label>");
-                    $('div#' + selector.id + '-edit').append("<a class='mx-2' href='javascript:;' shrinked-item='true' shrink-group-id='" + selector.id + "'>" + data[n].val + "</a>");
-                }
-            }
-    }
-    else {
-        if (!isEmpty)
         {
             
+            for (var n = 0; n < data.length; n++) {
+                if (isRadio || isCheckbox) {
+                    $('div#' + selector.id + '-edit').append("<label id='" + selector.id + "'>" + data[n].lbl + "</label>");
+                    $('div#' + selector.id + '-edit').append("<a class='mx-2' href='javascript:;' shrinked-item='true' shrink-group-id='" + selector.id + "'>" + data[n].val + "</a>");
+                }
+                else {
+                    if (data[n].lbl != undefined)
+                    {
+                        $('div#' + selector.id + '-edit').append("<label id='" + selector.id + "'>" + data[n].lbl.innerHTML + "</label>");
+                        $('div#' + selector.id + '-edit').append("<a class='mx-2' href='javascript:;' shrinked-item='true' shrink-group-id='" + selector.id + "'>" + data[n].val + "</a>");
+                    }
+                }
+            }
+        }
+            
+            
+    }
+    else {
+        if (isEmpty)
+        {
+            $('div#' + $(selector).attr('shrinker-group-id') + '-edit').html("<label class='text-right' id='" + selector.id + "'></label><a class='mx-2' href='javascript:;' shrinked-item='true' shrink-group-id='" + $(selector).attr('shrinker-group-id') + "'>Empty</a>");
+        }
+        else
+        {
             $selection = $('div#' + $(selector).attr('shrinker-group-id') + '-edit');
 
             $('div#' + $(selector).attr('shrinker-group-id') + '-edit a').detach()
             $('div#' + $(selector).attr('shrinker-group-id') + '-edit label').detach()
-            for (var x = 0; x < data.length; x++) {
-                if (data[x].lbl != undefined) {
-                    $selection.append("<label id='" + $(selector).attr('shrinker-group-id') + "'>" + data[x].lbl.innerHTML + "</label><a class='mx-2' href='javascript:;' shrinked-item='true' shrink-group-id='" + $(selector).attr('shrinker-group-id') + "'>" + data[x].val + "</a>");
+            for (var n = 0; n < data.length; n++) {
+                if (isRadio || isCheckbox) {
+                    $selection.append("<label id='" + $(selector).attr('shrinker-group-id') + "'>" + data[n].lbl + "</label>");
+                    $selection.append("<a class='mx-2' href='javascript:;' shrinked-item='true' shrink-group-id='" + $(selector).attr('shrinker-group-id') + "'>" + data[n].val + "</a>")
                 }
                 else {
-                    console.warn('Warning: make sure all inputs in group (' + $(selector).attr('shrinker-group-id') + ') connected to a LABEL with FOR attribute')
+                    if (data[n].lbl != undefined) {
+                        $selection.append("<label id='" + $(selector).attr('shrinker-group-id') + "'>" + data[n].lbl.innerHTML + "</label>");
+                        $selection.append("<a class='mx-2' href='javascript:;' shrinked-item='true' shrink-group-id='" + $(selector).attr('shrinker-group-id') + "'>" + data[n].val + "</a>")
+                    }
+                    else {
+                        console.warn('Warning: make sure all inputs in group (' + $(selector).attr('shrinker-group-id') + ') connected to a LABEL with FOR attribute')
+                    }
                 }
+            }
         }
-        }
-        else
-            $('div#' + $(selector).attr('shrinker-group-id') + '-edit').html("<label class='text-right' id='" + selector.id + "'></label><a class='mx-2' href='javascript:;' shrinked-item='true' shrink-group-id='" + $(selector).attr('shrinker-group-id') + "'>Empty</a>");
     }
-
 }
-
-
