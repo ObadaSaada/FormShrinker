@@ -5,6 +5,13 @@ small Library that can be used to shrink the size of large forms by changing gro
 
 * include the file into your project
 * add initialization Query Selector to your code <code> $('.formShrink').formShrink(); </code>
+* to change the language pass the <code>lang</code> option with value to your initialization Query Selector
+```javascript
+$('.formShrink').formShrink({
+  lang: 'en'
+});
+```
+
 * use the following format any where in your code
 ```html
  <!-- Include the source File -->
@@ -27,7 +34,7 @@ small Library that can be used to shrink the size of large forms by changing gro
 ```html
 <div id="groupOfRadioButtons" class="form-group formShrink" shrink-group="true">
     <fieldset>
-        <label fs-label>Drones Label</label>
+        <label id='groupOfRadioButtonsLabel' fs-label>Drones Label</label>
         <div>
             <input type="radio" id="huey" name="drone" value="huey"
                    checked>
@@ -48,7 +55,7 @@ small Library that can be used to shrink the size of large forms by changing gro
 
 <div id="groupOfCheckboxes" class="form-group formShrink" shrink-group="true">
     <fieldset>
-        <label fs-label>interests label</label>
+        <label id="groupOfCheckboxesLabel" fs-label>interests label</label>
         <div>
             <input type="checkbox" id="coding" name="interest" value="coding">
             <label for="coding">Coding</label>
