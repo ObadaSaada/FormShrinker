@@ -1,7 +1,7 @@
 /**
  * Name:			Form Shrinker
  * File:			fromShrinker.js
- * Version:			1.1.0 (Last Modified: 07/15/2019)
+ * Version:			1.1.1 (Last Modified: 07/21/2019)
  * Author:			Obada Saada ()
  * Description:		in place edit group of form elements 
  * ------------------------------------------------------------------------------------
@@ -11,6 +11,7 @@
  * jul 02 2019      Obada Saada         Allow fs-label For Radio,checkbox
  * jul 15 2019      Obada Saada         fix on cancel return default values of inputs
  * jul 15 2019      Obada Saada         allow language option (default is english[en])
+ * jul 21 2019      Obada Saada         show select-list option's text instead of value 
  * ===================================================================================
  * USAGE:
  * ------------------------------------------------------------------------------------
@@ -139,8 +140,19 @@
                             }
                             else if (inputs[iv].nodeName == "SELECT" && inputs[iv].id == inputsValues[iv].id)
                             {
-                                    $('select#' + inputs[iv].id).val(inputsValues[iv].text);
-                                    $('select#' + inputs[iv].id).trigger('change');
+                                
+                                $optionsList = $('select#' + inputs[iv].id).find('option');
+                                for (var ol = 0; ol < $optionsList.length; ol++) {
+                                    if ($optionsList[ol].text == inputsValues[iv].text)
+                                    {
+                                        $('select#' + inputs[iv].id).val($optionsList[ol].value);
+                                        $('select#' + inputs[iv].id).trigger('change');
+                                    }
+                                }
+                            }
+                            else if(inputs[iv].nodeName == "TEXTAREA" && inputs[iv].id == inputsValues[iv].id)
+                            {
+                                (inputsValues[iv].text == settings.lang.EmptyText) ? inputs[iv].value = "" : inputs[iv].value = inputsValues[iv].text;
                             }
                         }
                     }
@@ -204,8 +216,14 @@ function ShrinkerInputsData(inputs,selector,editMode,editSelector,settings)
             if (inputs.inputs[i].value != "") isEmpty = false;
         }
         else if (inputs.inputs[i].nodeName === "SELECT") {
-            
-            data.push({ lbl: inputs.inputs[i].labels[0], val: inputs.inputs[i].value });
+            $opId = inputs.inputs[i].value;
+            if ($opId != "") {
+                $selectedOption = $("#" + inputs.inputs[i].id + " option[value='" + $opId + "']").text();
+                data.push({ lbl: inputs.inputs[i].labels[0], val: $selectedOption });
+            }
+            else
+                data.push({ lbl: inputs.inputs[i].labels[0], val: "" });
+                
             if (inputs.inputs[i].value != "") isEmpty = false;
         }
         else if (inputs.inputs[i].nodeName === "TEXTAREA") {
