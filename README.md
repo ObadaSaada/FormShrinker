@@ -1,22 +1,91 @@
 # FormShrinker
-small Library that can be used to shrink the size of large forms by changing group of elements to inline text
+In-Place Editor to reduce the size of the form, which form elements will be replaced by inline or listed text
 
 # Usage
 
-* include the file into your project
-* add initialization Query Selector to your code <code> $('.formShrink').formShrink(); </code>
-* to change the language pass the <code>lang</code> option with value to your initialization Query Selector
-```javascript
-$('.formShrink').formShrink({
-  lang: 'en'
-});
+* insert the script source into your code
+```html
+<script src="./scripts/formShrinker.js"></script>
 ```
-
+* call the initializer using JQuery
+```html
+<script> 
+  $(function () {
+    $('.formShrink').formShrink();
+  });
+</script>
+```
+# Properties
+* Language property (lang)
+ > default language is english (en)
+ 
+ > you can modify the source code to add extra languages 
+```javascript
+$('.formShrink').formShrink(
+  {
+    lang: 'en'
+  }
+);
+```
+* View mode of the result can be linear or list (viewType)
+ > default view mode is linear
+ 
+ > to change the view mode to list change the <code>type</code> inside <code>viewType</code> to list
+```javascript
+$('.formShrink').formShrink(
+  {
+    viewType: 
+    {
+      type : 'linear'
+    },
+  }
+);
+```
+* CSS Classes
+ > there are four available css proparities can be used
+ 
+ -> ul
+ 
+ -> li
+ 
+ -> okButton
+ 
+ -> cancelButton
+ 
+ ```javascript
+$('.formShrink').formShrink(
+  {
+    CssClass:
+            {
+                ul: "ul-class",
+                li: "li-class",
+                okButton: "btn btn-primary",
+                cancelButton: "btn btn-inverse",
+            },
+  }
+);
+```
+* Default proparities 
+ > following code showing the default proparities
+ 
+ ```javascript
+ $('.formShrink').formShrink({
+            lang: 'en',
+            viewType: {
+                type: 'linear',
+            },
+            CssClass:
+            {
+                ul: "",
+                li: "",
+                okButton: "",
+                cancelButton: "",
+            }
+        });
+ ```
+ # HTML Formatting 
 * use the following format any where in your code
 ```html
- <!-- Include the source File -->
-  <script src="scripts/formShrinker/formShrinker.js"></script>
-
   <div id="Mygroup" class="form-group formShrink" shrink-group="true">
       <fieldset>
           <div id="xyz">
