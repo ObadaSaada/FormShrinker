@@ -1,0 +1,19 @@
+{
+  "name": "FormShrinker",
+  "version": "1.1.1",
+  "description": "In place editor",
+  "main": "dist/FormShrinker.js",
+  "types": "FormShrinker.d.ts",
+  "devDependencies": {
+    "bootstrap: "^4.0.0",
+    "jquery": "^3.2.1",
+   
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ObadaSaada/FormShrinker.git"
+  },
+  
+  "author": "oabda saada <obada.saada@outlook.com>",
+  "license": "MIT"
+}
