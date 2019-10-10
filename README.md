@@ -1,4 +1,4 @@
-# FormShrinker
+# FormShrinker [![Build Status](https://travis-ci.org/ObadaSaada/FormShrinker.svg?branch=master)](https://travis-ci.org/ObadaSaada/FormShrinker)
 In-Place Editor to reduce the size of the form, which form elements will be replaced by inline or listed text
 
 # Usage
