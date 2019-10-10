@@ -5,8 +5,8 @@
   "main": "dist/FormShrinker.js",
   "types": "FormShrinker.d.ts",
   "devDependencies": {
-    "bootstrap: "^4.0.0",
-    "jquery": "^3.2.1",
+    "bootstrap": "4.3.1",
+    "jquery": "3.2.1",
    
   },
   "repository": {
