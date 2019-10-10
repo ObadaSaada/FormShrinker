@@ -1,9 +1,9 @@
 /**
  * Name:			Form Shrinker
  * File:			fromShrinker.js
- * Version:			1.1.1 (Last Modified: 07/21/2019)
+ * Version:			1.1.1 (Last Modified: 10/10/2019)
  * Author:			Obada Saada ()
- * Description:		in place edit group of form elements 
+ * Description:		In-Place group of elements editor
  * ------------------------------------------------------------------------------------
  * Date			    Author		        Changes
  * ------------------------------------------------------------------------------------
@@ -11,11 +11,12 @@
  * jul 02 2019      Obada Saada         Allow fs-label For Radio,checkbox
  * jul 15 2019      Obada Saada         fix on cancel return default values of inputs
  * jul 15 2019      Obada Saada         allow language option (default is english[en])
- * jul 21 2019      Obada Saada         show select-list option's text instead of value 
+ * jul 21 2019      Obada Saada         show select-list option's text instead of value
+ * oct 10 2019      Obada Saada         create new proparites (view type, css classes)
  * ===================================================================================
  * USAGE:
  * ------------------------------------------------------------------------------------
- * $('.formShrink').formShrink(); 
+ * $('.formShrink').formShrink({ param }); 
  * ===================================================================================
  */
 (function ($) {
@@ -23,9 +24,22 @@
     $.fn.formShrink = function (options) {
         var Languages = ['ar', 'en'];
         var selectedLanguage = 'en';
-        if (options.lang.length > 0 && Languages.includes(options.lang))
-            selectedLanguage = options.lang;
-        
+        var viewTypes = ['linear','list']
+        var selectedViewType = 'linear';    
+        var CssClass_ul = '';    
+        var CssClass_li = '';
+        var CssClass_okButton =''
+        var CssClass_CancelButton='';
+
+        options.lang == undefined ? options.lang = selectedLanguage : options.lang;
+        options.viewType.type == undefined ? options.viewType[0] = selectedViewType : options.viewType.type;
+        options.lang.length > 0 && Languages.includes(options.lang) ?selectedLanguage = options.lang: selectedLanguage;
+        options.viewType.type.length > 0 && viewTypes.includes(options.viewType.type)?  selectedViewType = options.viewType.type : selectedViewType; 
+        options.CssClass.ul.length > 0 ?  CssClass_ul = options.CssClass.ul:CssClass_ul; 
+        options.CssClass.li.length > 0 ?  CssClass_li = options.CssClass.li:CssClass_li; 
+        options.CssClass.okButton.length > 0 ?  CssClass_okButton = options.CssClass.okButton:CssClass_okButton; 
+        options.CssClass.cancelButton.length > 0 ?  CssClass_CancelButton = options.CssClass.cancelButton:CssClass_CancelButton; 
+
         var settings = {
             lang: {
                 en:
@@ -40,9 +54,24 @@
                         okButtonText: 'تم',
                         cancelButtonText: 'الغاء'
                     }
+            },
+            viewType: 
+            {
+                type:selectedViewType,
+            },
+            CssClass:
+            {
+                ul: CssClass_ul,
+                li: CssClass_li,
+                okButton: CssClass_okButton,
+                cancelButton: CssClass_CancelButton,
             }
         };
+
         options.lang = settings.lang[selectedLanguage];
+        options.viewType = settings.viewType;
+        options.CssClass = settings.CssClass;
+
         if (options) {
             $.extend(settings, options);
         }
@@ -54,10 +83,13 @@
             var labels = $this.find('label');
             var langSettingsParam = settings.lang
             $this.hide();
-            $this.append("<div id='shrinker-controls'><input class='btn btn-primary' type='button' id='ok' value='"+settings.lang.okButtonText+"' shrinker-group-id='" + this.id + "' /> <input class='btn btn-inverse' type='button' id='cancel' value='"+settings.lang.cancelButtonText+"' shrinker-group-id='" + this.id + "' /></div>")
+            $this.append("<div id='shrinker-controls'>" + 
+                            "<input class='"+settings.CssClass.okButton+"' type='button' id='ok' value='"+settings.lang.okButtonText+"' shrinker-group-id='" + this.id + "' />" + 
+                            "<input class='"+settings.CssClass.cancelButton+"' type='button' id='cancel' value='"+settings.lang.cancelButtonText+"' shrinker-group-id='" + this.id + "' />" + 
+                        "</div>")
             if($this.attr('shrink-group')=='true')
             {
-                var shrink = ShrinkerInputsData({ inputs, labels, langSettingsParam }, this)
+                var shrink = ShrinkerInputsData({ inputs, labels, langSettingsParam }, this,undefined,settings)
             }
             $("div#" + this.id + "-edit").on('click', 'a', function (e) {
                 
@@ -86,7 +118,7 @@
                     $("div#" + $(this).attr('shrinker-group-id') + '.form-group.formShrink').hide();
                     
                     
-                    var shrink = ShrinkerInputsData({ inputs, labels, langSettingsParam }, this, true, editSelector)
+                    var shrink = ShrinkerInputsData({ inputs, labels, langSettingsParam }, this, true, settings)
                     
                 }
                 else if (this.id == 'cancel') {
@@ -168,7 +200,7 @@
         
     };
 })(jQuery);
-function ShrinkerInputsData(inputs,selector,editMode,editSelector,settings)
+function ShrinkerInputsData(inputs,selector,editMode,settings)
 {
     editMode = typeof editMode !== 'undefined' ? editMode : false;
 
@@ -176,10 +208,6 @@ function ShrinkerInputsData(inputs,selector,editMode,editSelector,settings)
     var isRadio = false;
     var isCheckbox = false;
     var data = [];
-    //-----------------------------------------------------------------------
-    //https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/elements
-    //-----------------------------------------------------------------------
-    // Iterate over the form controls
     
     for (i = 0; i < inputs.inputs.length; i++) {
         if (inputs.inputs[i].nodeName === "INPUT" && (
@@ -232,7 +260,6 @@ function ShrinkerInputsData(inputs,selector,editMode,editSelector,settings)
             if (inputs.inputs[i].value != "") isEmpty = false;
         }
     }
-    
     data = data.filter(v => data.values(v).length !== 0);
     var dataArray = [];
     for (var b = 0; b < data.length; b++) {
@@ -243,17 +270,17 @@ function ShrinkerInputsData(inputs,selector,editMode,editSelector,settings)
             else
                 dataArray.push({ lbl: data[b].lbl, val: '<span class="alert-danger">' + inputs.langSettingsParam.EmptyText + '</span>' })
         }
-            
     }
-
     data = dataArray;
     if (!editMode) {
         $(selector).before("<div class='d-inline-flex' id='" + selector.id + "-edit'></div>");
+        
         if (isEmpty)
+        {
             $('div#' + selector.id + '-edit').html("<label id='" + selector.id + "'></label><a class='mx-2' href='javascript:;' shrinked-item='true' shrinked-for='' shrink-group-id='" + selector.id + "'>" + inputs.langSettingsParam.EmptyText + "</a>");
+        }
         else
         {
-            
             for (var n = 0; n < data.length; n++) {
                 if (isRadio || isCheckbox) {
                     $('div#' + selector.id + '-edit').append("<label id='" + selector.id + "'>" + data[n].lbl.innerHTML + "</label>");
@@ -267,9 +294,7 @@ function ShrinkerInputsData(inputs,selector,editMode,editSelector,settings)
                     }
                 }
             }
-        }
-            
-            
+        }  
     }
     else {
         if (isEmpty)
@@ -279,29 +304,43 @@ function ShrinkerInputsData(inputs,selector,editMode,editSelector,settings)
         else
         {
             $selection = $('div#' + $(selector).attr('shrinker-group-id') + '-edit');
+            settings.viewType.type =='list'? $selection.html("<ul class='"+settings.CssClass.ul+"'>") :$selection.html("");
 
-            $('div#' + $(selector).attr('shrinker-group-id') + '-edit a').detach()
-            $('div#' + $(selector).attr('shrinker-group-id') + '-edit label').detach()
             for (var n = 0; n < data.length; n++) {
                 if (isRadio || isCheckbox) {
-                    $selection.append("<label id='" + $(selector).attr('shrinker-group-id') + "'>" + data[n].lbl.innerHTML + "</label>");
-                    $selection.append("<a class='mx-2' href='javascript:;' shrinked-item='true'  shrinked-for='" + data[n].lbl.id + "'  shrink-group-id='" + $(selector).attr('shrinker-group-id') + "'>" + data[n].val + "</a>")
+                    if(settings.viewType.type =='list')
+                    {
+                        $label ="<label id='" + $(selector).attr('shrinker-group-id') + "'>" + data[n].lbl.innerHTML + "</label>";
+                        $link = "<a class='mx-2' href='javascript:;' shrinked-item='true'  shrinked-for='" + data[n].lbl.id + "'  shrink-group-id='" + $(selector).attr('shrinker-group-id') + "'>" + data[n].val + "</a>";
+                        $listcontent = "<li class='"+settings.CssClass.li+"'>" + $label + $link +"</li>"
+                        $('div#' + $(selector).attr('shrinker-group-id') + '-edit ul').append($listcontent)    
+                    }
+                    else
+                    {
+                        $selection.append("<label id='" + $(selector).attr('shrinker-group-id') + "'>" + data[n].lbl.innerHTML + "</label>");
+                        $selection.append("<a class='mx-2' href='javascript:;' shrinked-item='true'  shrinked-for='" + data[n].lbl.id + "'  shrink-group-id='" + $(selector).attr('shrinker-group-id') + "'>" + data[n].val + "</a>")
+                    }
                 }
                 else {
                     if (data[n].lbl != undefined) {
-                        $selection.append("<label id='" + $(selector).attr('shrinker-group-id') + "'>" + data[n].lbl.innerHTML + "</label>");
-                        $selection.append("<a class='mx-2' href='javascript:;' shrinked-item='true'  shrinked-for='" + $(data[n].lbl).attr('for') + "'  shrink-group-id='" + $(selector).attr('shrinker-group-id') + "'>" + data[n].val + "</a>")
+                        if(settings.viewType.type =='list')
+                        {
+                            $label ="<label id='" + $(selector).attr('shrinker-group-id') + "'>" + data[n].lbl.innerHTML + "</label>";
+                            $link = "<a class='mx-2' href='javascript:;' shrinked-item='true'  shrinked-for='" + $(data[n].lbl).attr('for') + "'  shrink-group-id='" + $(selector).attr('shrinker-group-id') + "'>" + data[n].val + "</a>";    
+                            $listcontent = "<li class='"+settings.CssClass.li+"'>" + $label + $link +"</li>"
+                            $('div#' + $(selector).attr('shrinker-group-id') + '-edit ul').append($listcontent)    
+                        }
+                        else
+                        {
+                            $selection.append("<label id='" + $(selector).attr('shrinker-group-id') + "'>" + data[n].lbl.innerHTML + "</label>");
+                            $selection.append("<a class='mx-2' href='javascript:;' shrinked-item='true'  shrinked-for='" + $(data[n].lbl).attr('for') + "'  shrink-group-id='" + $(selector).attr('shrinker-group-id') + "'>" + data[n].val + "</a>")
+                        }
                     }
                     else {
                         console.warn('Warning: make sure all inputs in group (' + $(selector).attr('shrinker-group-id') + ') connected to a LABEL with FOR attribute')
                     }
                 }
             }
-        
         }
-        
     }
-
 }
-
-
