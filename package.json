@@ -9,6 +9,10 @@
           "url": "git://github.com/ObadaSaada/FormShrinker.git"
         }
       ],
-    "author": "oabda saada <obada.saada@outlook.com>",
+    "dependencies": {
+    "bootsrap": "4.3.0",
+    "jquery": "3.4.1"
+    }
+    "author": "obada saada <obada.saada@outlook.com>",
     "license": "MIT"
   }
