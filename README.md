@@ -1,7 +1,7 @@
 # FormShrinker 
 [![Build Status](https://travis-ci.org/ObadaSaada/FormShrinker.svg?branch=master)](https://travis-ci.org/ObadaSaada/FormShrinker)
-[![npm version](https://img.shields.io/npm/v/FormShrinker.svg)](https://www.npmjs.com/package/formshrinker)
-[![npm version](https://img.shields.io/github/package-json/v/obadasaada/formshrinker?label=GitHub)](https://github.com/ObadaSaada/FormShrinker)
+[![npm version](https://img.shields.io/npm/v/formshrinker.svg)](https://www.npmjs.com/package/formshrinker)
+[![Github version](https://img.shields.io/github/package-json/v/obadasaada/formshrinker?label=GitHub)](https://github.com/ObadaSaada/FormShrinker)
 
 In-Place Editor to reduce the size of the form, which form elements will be replaced by inline or listed text
 
