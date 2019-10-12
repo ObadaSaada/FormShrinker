@@ -10,7 +10,7 @@
         }
       ],
     "dependencies": {
-    "bootsrap": ">=4.1.2",
+    "bootstrap": ">=4.3.1",
     "jquery": "3.4.1"
     },
     "author": "obada saada <obada.saada@outlook.com>",
