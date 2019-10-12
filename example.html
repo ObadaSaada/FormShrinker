@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>FormShrinker Example</title>
+    <!-- Dependancies -->
+    <link rel="stylesheet" href="./bootstrap/dist/css/bootstrap.min.css">
+    <script src="./jquery/dist/jquery.min.js"></script>
+    <script src="./bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- / Dependancies -->
+</head>
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color: teal;">
+        <div class="container">
+          <a class="navbar-brand" href="#">FormShrinker</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item active">
+                <a class="nav-link" href="javascript:;">Example
+                  <span class="sr-only">(current)</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="https://github.com/ObadaSaada/FormShrinker">GitHub</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    
+      <!-- Header -->
+      <header class="bg-info py-5 mb-5">
+        <div class="container h-100">
+          <div class="row h-100 align-items-center">
+            <div class="col-lg-12">
+              <h1 class="display-4 text-white mt-5 mb-2">FormShrinker</h1>
+              <p class="lead mb-5 text-white-50">Example using FormShrinker</p>
+            </div>
+          </div>
+        </div>
+      </header>
+    
+      <!-- Page Content -->
+      <div class="container">
+    
+        <div class="row">
+          <div class="col-md-8 mb-5">
+            <h2>Example</h2>
+            <hr>
+            <form>
+                    <table class="table table-condensed table-bordered" >
+                        <thead>
+                            <tr>
+                                <th width="20%">Caption</th>
+                                <th>Controls</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="bg-light">Full Name</td>
+                                <td>
+                                    <div id="FullNameGroupx" class="form-group formShrink" shrink-group="true">
+                                        <fieldset>
+                                            <label for="Firstname">Firstname</label>
+                                            <input type="text" name="Firstname" id="Firstname" class="form-control">
+                                            <label for="Secondname">Secondname</label>
+                                            <input type="text" name="Secondname" id="Secondname" class="form-control">
+                                            <label for="Thirdname">Thirdname</label>
+                                            <input type="text" name="Thirdname" id="Thirdname" class="form-control">
+                                            <label for="Lastname">Lastname</label>
+                                            <input type="text" name="Lastname" id="Lastname" class="form-control">
+                                        </fieldset>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-light">Radio Buttons</td>
+                                <td>
+                                    <div id="groupOfRadioButtons" class="form-group formShrink" shrink-group="true">
+                                        <fieldset>
+                                            <label id='groupOfRadioButtonsLabel' fs-label>Drones Label</label>
+                                            <div>
+                                                <input type="radio" id="huey" name="drone" value="huey"
+                                                    checked>
+                                                <label for="huey">Huey</label>
+                                            </div>
+                                    
+                                            <div>
+                                                <input type="radio" id="dewey" name="drone" value="dewey">
+                                                <label for="dewey">Dewey</label>
+                                            </div>
+                                    
+                                            <div>
+                                                <input type="radio" id="louie" name="drone" value="louie">
+                                                <label for="louie">Louie</label>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </td>
+                            </tr>
+                                <tr>
+                                    <td class="bg-light">Radio Buttons</td>
+                                    <td>
+                                        <div id="groupOfCheckboxes" class="form-group formShrink" shrink-group="true">
+                                            <fieldset>
+                                                <label id="groupOfCheckboxesLabel" fs-label>interests label</label>
+                                                <div>
+                                                    <input type="checkbox" id="coding" name="interest" value="coding">
+                                                    <label for="coding">Coding</label>
+                                                </div>
+                                                <div>
+                                                    <input type="checkbox" id="music" name="interest" value="music">
+                                                    <label for="music">Music</label>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                    </td>
+                                </tr>
+                        </tbody>
+                    </table>
+                </form>
+          </div>
+          <div class="col-md-4 mb-5">
+            <h2>Info</h2>
+            <hr>
+            <p>Read the instruction in GitHub</p>
+            <a href="https://github.com/ObadaSaada/FormShrinker">Click here</a>
+          </div>
+        </div>
+        <!-- /.row -->
+    
+    
+      </div>
+      <!-- /.container -->
+    
+      <!-- Footer -->
+      <footer class="py-5 bg-dark">
+        <div class="container">
+          <p class="m-0 text-center text-white">FormShrinker</p>
+        </div>
+        <!-- /.container -->
+      </footer>
+</html>
+    <!-- Library -->
+    <script src="formShrinker.js"></script>
+    <!-- / Library -->    
+
+    <!-- init -->
+    <script>
+    $('.formShrink').formShrink({
+            lang: 'en',
+            viewType: {
+                type: 'linear',
+            },
+            CssClass:
+            {
+                ul: "",
+                li: "",
+                okButton: "btn btn-primary",
+                cancelButton: "btn btn-inverse",
+            }
+        });
+    </script>
+    <!-- / init -->
