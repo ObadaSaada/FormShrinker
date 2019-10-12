@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Name:			Form Shrinker
  * File:			fromShrinker.js
  * Version:			1.1.1 (Last Modified: 10/10/2019)
