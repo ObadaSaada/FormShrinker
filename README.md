@@ -79,6 +79,21 @@ $('.formShrink').formShrink(
   }
 );
 ```
+* Animation
+ > to choose the effects and delay times go to the Animate.css library readme here https://github.com/daneden/animate.css
+  ```javascript
+$('.formShrink').formShrink(
+  {
+    Animation: {
+                animate: true,
+                onOpen: 'FadeIn',
+                onClose: 'FadeOut',
+                delay: 'Fast',
+                },
+  }
+);
+```
+
 * Default proparities 
  > following code showing the default proparities
  
@@ -95,6 +110,12 @@ $('.formShrink').formShrink(
                 okButton: "",
                 cancelButton: "",
             }
+            Animation: {
+                animate: false,
+                onOpen: '',
+                onClose: '',
+                delay: '',
+            },
         });
  ```
  # HTML Formatting 
