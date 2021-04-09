@@ -1,3 +1,5 @@
+[![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/ObadaSaada/FormShrinker)
+
 # FormShrinker 
 [![Build Status](https://travis-ci.org/ObadaSaada/FormShrinker.svg?branch=master)](https://travis-ci.org/ObadaSaada/FormShrinker)
 [![npm version](https://img.shields.io/npm/v/formshrinker.svg)](https://www.npmjs.com/package/formshrinker)
